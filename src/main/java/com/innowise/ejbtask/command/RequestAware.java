@@ -68,7 +68,6 @@ public class RequestAware {
 
         if (role != null) {
             if (Role.NONE.name().equals(role)) {
-                request.setAttribute("error", "Invalid name or password");
                 return "login";
             }
 

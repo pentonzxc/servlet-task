@@ -1,6 +1,5 @@
 package com.innowise.ejbtask.beans;
 
-import com.innowise.ejbtask.beans.data.RequestBeanDataWrapper;
 import com.innowise.ejbtask.command.RequestAware;
 import com.innowise.ejbtask.mapper.InputDataMapper;
 import jakarta.annotation.PostConstruct;
@@ -40,36 +39,38 @@ public class BeanManager {
         String forward = null;
         Bean bean = beanMap.get(beanType);
 
-        var dataWrapper = dataWrapper(bean, requestAware);
-        forward = dataWrapper.getForward();
+        var requestData = requestWrapper(bean, requestAware);
 
-        var outputData = bean.perform(dataWrapper.getData());
+        var outputData = bean.perform(requestData.getData() , requestAware);
 
         requestAware.addAttribute(outputData);
 
-        if ("login".equals(beanType)) {
-            forward = requestAware.authenticate(forward);
-        }
-
-        forward = requestAware.authorize(forward);
+//        if ("login".equals(beanType)) {
+//            forward = requestAware.authenticate(forward);
+//        }
+//
+//        forward = requestAware.authorize(forward);
 
         requestAware.forward(forward);
     }
 
 
-    private RequestBeanDataWrapper dataWrapper(Bean bean, RequestAware requestAware) {
-        RequestBeanDataWrapper wrapper = null;
+    private RequestData requestWrapper(Bean bean, RequestAware requestAware) {
+        RequestData wrapper = null;
 
         if (bean instanceof RegisterBean) {
-            wrapper = new RequestBeanDataWrapper(InputDataMapper.toRegisterBeanInputData(requestAware), "index");
+            wrapper = new RequestData(InputDataMapper.toRegisterBeanInputData(requestAware));
+//            wrapper = new RequestBean(InputDataMapper.toRegisterBeanInputData(requestAware), "index");
         }
 
         if (bean instanceof UsersBean) {
-            wrapper = new RequestBeanDataWrapper(InputDataMapper.empty(), "list");
+//            wrapper = new RequestBean(InputDataMapper.empty(), "list");
+            wrapper = new RequestData(InputDataMapper.empty());
         }
 
         if (bean instanceof LoginBean) {
-            wrapper = new RequestBeanDataWrapper(InputDataMapper.toLoginBeanInputData(requestAware), "index");
+//            wrapper = new RequestBean(InputDataMapper.toLoginBeanInputData(requestAware), "index");
+            wrapper = new RequestData(InputDataMapper.toLoginBeanInputData(requestAware));
         }
 
         return wrapper;

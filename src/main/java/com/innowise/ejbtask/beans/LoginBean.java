@@ -1,6 +1,7 @@
 package com.innowise.ejbtask.beans;
 
 import com.innowise.ejbtask.User;
+import com.innowise.ejbtask.command.RequestAware;
 import com.innowise.ejbtask.repository.UserRepository;
 import com.innowise.ejbtask.security.Role;
 import jakarta.ejb.EJB;
@@ -18,8 +19,11 @@ public class LoginBean implements Bean {
     private UserRepository userRepository;
 
     @Override
-    public OutputData perform(InputData data) {
+    public OutputData perform(InputData data, RequestAware request) {
         var user = login((LoginData) data);
+
+        request.authenticate();
+
 
         return new AuthenticationData(user.map(User::getRole).orElse(Role.NONE));
     }
