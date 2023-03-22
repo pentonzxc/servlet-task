@@ -1,6 +1,7 @@
 package com.innowise.ejbtask.beans;
 
 import com.innowise.ejbtask.User;
+import com.innowise.ejbtask.command.RequestAware;
 import com.innowise.ejbtask.repository.UserRepository;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
@@ -16,16 +17,22 @@ public class UsersBean implements Bean {
     private UserRepository userRepository;
 
     @Override
-    public UserListData perform(InputData data) {
+    public UserListData perform(InputData data, RequestAware requestAware) {
         return new UserListData(userRepository.findAll());
     }
 
 
     public static class UserListData implements OutputData {
+
         private List<User> users;
 
         public UserListData(List<User> users) {
             this.users = users;
+        }
+
+        @Override
+        public String forward() {
+            return "list";
         }
 
         @Override

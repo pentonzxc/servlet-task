@@ -1,6 +1,6 @@
 package com.innowise.ejbtask;
 
-import com.innowise.ejbtask.security.Role;
+import com.innowise.ejbtask.enums.Role;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

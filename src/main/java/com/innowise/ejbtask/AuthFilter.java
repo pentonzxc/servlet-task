@@ -1,19 +1,17 @@
 package com.innowise.ejbtask;
 
 
-import com.innowise.ejbtask.security.Role;
+import com.innowise.ejbtask.enums.Role;
 import com.innowise.ejbtask.util.RequestUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @WebFilter(filterName = "someFilter", urlPatterns = "/*")
 public class AuthFilter implements jakarta.servlet.Filter {

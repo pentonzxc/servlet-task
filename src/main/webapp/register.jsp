@@ -21,8 +21,10 @@
 
     <%= addErrorMessage(request) ? request.getAttribute("error") : "" %>
 
-    <input type="text" name="username" placeholder="Username" id="username"/>
-    <input type="text" name="password" placeholder="Password" id="password"/>
+    <input type="text" name="username" placeholder="Username"/>
+    <input type="text" name="password" placeholder="Password"/>
+    <input type="email" name="email" placeholder="Email">
+    <input type="text" name="country" placeholder="Country"/>
     <input type="submit" value="login">
 </form>
 

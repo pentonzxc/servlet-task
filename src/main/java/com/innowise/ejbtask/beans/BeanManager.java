@@ -1,6 +1,7 @@
 package com.innowise.ejbtask.beans;
 
 import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.enums.AnswerType;
 import com.innowise.ejbtask.mapper.InputDataMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
@@ -26,12 +27,16 @@ public class BeanManager {
     @EJB
     private LoginBean loginBean;
 
+    @EJB
+    private RemoveUserBean removeUserBean;
+
 
     @PostConstruct
     private void init() {
         beanMap.put("register", registerBean);
         beanMap.put("users", usersBean);
         beanMap.put("login", loginBean);
+        beanMap.put("delete", removeUserBean);
     }
 
 
@@ -41,17 +46,15 @@ public class BeanManager {
 
         var requestData = requestWrapper(bean, requestAware);
 
-        var outputData = bean.perform(requestData.getData() , requestAware);
+        var outputData = bean.perform(requestData.getData(), requestAware);
 
         requestAware.addAttribute(outputData);
 
-//        if ("login".equals(beanType)) {
-//            forward = requestAware.authenticate(forward);
-//        }
-//
-//        forward = requestAware.authorize(forward);
+        forward = outputData.forward();
+        forward = requestAware.authorize(forward);
 
-        requestAware.forward(forward);
+        if(requestData.getAnswerType() == AnswerType.FORWARD) requestAware.forward(forward);
+        if(requestData.getAnswerType() == AnswerType.REDIRECT) requestAware.redirect();
     }
 
 
@@ -59,18 +62,19 @@ public class BeanManager {
         RequestData wrapper = null;
 
         if (bean instanceof RegisterBean) {
-            wrapper = new RequestData(InputDataMapper.toRegisterBeanInputData(requestAware));
-//            wrapper = new RequestBean(InputDataMapper.toRegisterBeanInputData(requestAware), "index");
+            wrapper = new RequestData(InputDataMapper.toRegisterBeanInputData(requestAware), AnswerType.FORWARD);
         }
 
         if (bean instanceof UsersBean) {
-//            wrapper = new RequestBean(InputDataMapper.empty(), "list");
-            wrapper = new RequestData(InputDataMapper.empty());
+            wrapper = new RequestData(InputDataMapper.empty() , AnswerType.FORWARD);
         }
 
         if (bean instanceof LoginBean) {
-//            wrapper = new RequestBean(InputDataMapper.toLoginBeanInputData(requestAware), "index");
-            wrapper = new RequestData(InputDataMapper.toLoginBeanInputData(requestAware));
+            wrapper = new RequestData(InputDataMapper.toLoginBeanInputData(requestAware), AnswerType.FORWARD);
+        }
+
+        if (bean instanceof RemoveUserBean) {
+            wrapper = new RequestData(InputDataMapper.toRemoveUserBeanInputData(requestAware), AnswerType.REDIRECT);
         }
 
         return wrapper;

@@ -7,6 +7,7 @@ public interface Bean {
     OutputData perform(InputData data , RequestAware request);
 
     interface InputData {
+        String forward();
     }
 
     interface OutputData {

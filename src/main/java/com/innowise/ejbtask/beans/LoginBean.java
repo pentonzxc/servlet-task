@@ -1,14 +1,13 @@
 package com.innowise.ejbtask.beans;
 
 import com.innowise.ejbtask.User;
+import com.innowise.ejbtask.beans.data.DefaultData;
+import com.innowise.ejbtask.beans.data.ErrorData;
 import com.innowise.ejbtask.command.RequestAware;
 import com.innowise.ejbtask.repository.UserRepository;
-import com.innowise.ejbtask.security.Role;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-
-import java.util.Optional;
 
 
 @Stateless
@@ -22,15 +21,26 @@ public class LoginBean implements Bean {
     public OutputData perform(InputData data, RequestAware request) {
         var user = login((LoginData) data);
 
-        request.authenticate();
+        if (user == null) {
+            return new ErrorData("login", "Invalid credentials");
+        }
+
+        request.getRequest().getSession(false).setAttribute("role", user.getRole().name());
 
 
-        return new AuthenticationData(user.map(User::getRole).orElse(Role.NONE));
+        return new DefaultData(data.forward(), "", "");
     }
 
 
-    public Optional<User> login(LoginData loginData) {
-        return userRepository.findByName(loginData.getName());
+    public User login(LoginData data) {
+        var userOpt = userRepository.findByName(data.getName());
+
+        return userOpt.isPresent() && validPassword(data, userOpt.get()) ? userOpt.get() : null;
+    }
+
+
+    public boolean validPassword(LoginData data, User user) {
+        return data.getPassword().equals(user.getPassword());
     }
 
 
@@ -40,40 +50,29 @@ public class LoginBean implements Bean {
 
         private String password;
 
-        public LoginData(String name, String password) {
+        private String forward;
+
+
+        public LoginData(String name, String password, String forward) {
             this.name = name;
             this.password = password;
+            this.forward = forward;
         }
+
 
         public String getName() {
             return name;
         }
 
+
         public String getPassword() {
             return password;
         }
-    }
 
-
-    public static class AuthenticationData implements OutputData {
-
-        private Role role;
-
-
-        public AuthenticationData(Role role) {
-            this.role = role;
-        }
 
         @Override
-        public String attributeName() {
-            return "role";
+        public String forward() {
+            return forward;
         }
-
-        @Override
-        public Object attributeValue() {
-            return role.name();
-        }
-
-
     }
 }

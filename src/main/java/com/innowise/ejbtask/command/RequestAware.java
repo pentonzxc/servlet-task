@@ -2,7 +2,7 @@ package com.innowise.ejbtask.command;
 
 import com.innowise.ejbtask.beans.Bean;
 import com.innowise.ejbtask.beans.data.EmptyData;
-import com.innowise.ejbtask.security.Role;
+import com.innowise.ejbtask.enums.Role;
 import com.innowise.ejbtask.util.RequestUtil;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
@@ -63,19 +63,7 @@ public class RequestAware {
         return response;
     }
 
-    public String authenticate(String forward) {
-        String role = (String) request.getAttribute("role");
 
-        if (role != null) {
-            if (Role.NONE.name().equals(role)) {
-                return "login";
-            }
-
-            request.getSession(false).setAttribute("role", role);
-        }
-
-        return forward;
-    }
 
     public String authorize(String forward) {
         Role role = RequestUtil.role(request);

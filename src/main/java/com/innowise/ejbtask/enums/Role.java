@@ -1,4 +1,4 @@
-package com.innowise.ejbtask.security;
+package com.innowise.ejbtask.enums;
 
 public enum Role {
     ADMIN,

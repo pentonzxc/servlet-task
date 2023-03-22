@@ -44,8 +44,23 @@ public class UserRepository {
             user = session.createQuery(cr).getSingleResult();
 
             transaction.commit();
-        } catch (Exception exception) {
-            transaction.rollback();
+        } catch (Exception ignore) {
+        }
+
+        return Optional.ofNullable(user);
+    }
+
+    public Optional<User> findById(Integer id) {
+        Transaction transaction = null;
+        User user = null;
+
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+
+            user = session.find(User.class, id);
+
+            transaction.commit();
+        } catch (Exception ignore) {
         }
 
         return Optional.ofNullable(user);
@@ -66,14 +81,29 @@ public class UserRepository {
             users = session.createQuery(criteria).getResultList();
 
             transaction.commit();
-        } catch (Exception exception) {
-            transaction.rollback();
+        } catch (Exception ignore) {
         }
 
         return users;
     }
 
-    public void save(User user){
+
+    public void remove(User user) {
+        Transaction transaction = null;
+        List<User> users = null;
+
+        try (Session session = factory.openSession()) {
+            transaction = session.beginTransaction();
+
+            session.remove(user);
+
+            transaction.commit();
+        } catch (Exception ignore) {
+        }
+    }
+
+
+    public void save(User user) {
         Transaction transaction = null;
 
         try (Session session = factory.openSession()) {
@@ -82,8 +112,7 @@ public class UserRepository {
             session.persist(user);
 
             transaction.commit();
-        } catch (Exception exception) {
-            transaction.rollback();
+        } catch (Exception ignore) {
         }
     }
 }

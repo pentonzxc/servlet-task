@@ -3,7 +3,7 @@ package com.innowise.ejbtask;
 
 import com.innowise.ejbtask.beans.BeanManager;
 import com.innowise.ejbtask.command.RequestAware;
-import com.innowise.ejbtask.security.Role;
+import com.innowise.ejbtask.enums.Role;
 import com.innowise.ejbtask.util.RequestUtil;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
 
 
 @WebServlet(name = "main", value = "/")

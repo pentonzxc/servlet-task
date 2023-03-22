@@ -4,6 +4,11 @@ import com.innowise.ejbtask.beans.Bean;
 
 public class EmptyData implements Bean.OutputData, Bean.InputData {
     @Override
+    public String forward() {
+        return "";
+    }
+
+    @Override
     public String attributeName() {
         return "";
     }
