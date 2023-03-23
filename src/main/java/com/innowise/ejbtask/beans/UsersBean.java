@@ -1,7 +1,8 @@
 package com.innowise.ejbtask.beans;
 
-import com.innowise.ejbtask.User;
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
+import com.innowise.ejbtask.entity.User;
+import com.innowise.ejbtask.wrapper.RequestAware;
 import com.innowise.ejbtask.repository.UserRepository;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
@@ -11,10 +12,11 @@ import java.util.List;
 
 @Stateless
 @LocalBean
-public class UsersBean implements Bean {
+public class UsersBean implements RequestBean {
 
     @EJB
     private UserRepository userRepository;
+
 
     @Override
     public UserListData perform(InputData data, RequestAware requestAware) {
@@ -31,7 +33,7 @@ public class UsersBean implements Bean {
         }
 
         @Override
-        public String forward() {
+        public String to() {
             return "list";
         }
 

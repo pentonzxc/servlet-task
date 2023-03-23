@@ -1,8 +1,8 @@
 package com.innowise.ejbtask.beans.data;
 
-import com.innowise.ejbtask.beans.Bean;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
 
-public class DefaultData implements Bean.OutputData, Bean.InputData {
+public class DefaultData implements RequestBean.OutputData, RequestBean.InputData {
 
     private String forward;
 
@@ -24,7 +24,7 @@ public class DefaultData implements Bean.OutputData, Bean.InputData {
     }
 
     @Override
-    public String forward() {
+    public String to() {
         return forward;
     }
 

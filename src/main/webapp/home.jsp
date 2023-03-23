@@ -1,11 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: pentonzxc
-  Date: 21.03.23
-  Time: 18:26
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Home page</title>
@@ -22,15 +16,16 @@
 <body>
 
 <div class="container h-100 w-25 d-flex flex-column justify-content-center gap-3">
-    <form action="users" method="get">
-        <input class="btn-secondary" type="submit" value="Таблица"/>
+    <form class="form-group" action="users" method="get">
+        <input
+                class="form-control btn-secondary"
+                type="submit"
+                value="Таблица"
+        />
     </form>
-    <form action="logout" method="get">
-        <input class="btn-secondary" type="submit" value="Выйти"/>
+    <form class="form-group" action="logout" method="get">
+        <input class="form-control btn-secondary" type="submit" value="Выйти"/>
     </form>
-    <script>
-
-    </script>
 </div>
 
 

@@ -1,32 +1,95 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: pentonzxc
-  Date: 19.03.23
-  Time: 12:42
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
-</head>
-<body>
-
-<form action="register" method="post">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <%!
         public boolean addErrorMessage(HttpServletRequest request) {
             return request.getAttribute("error") != null;
         }
     %>
+</head>
 
-    <%= addErrorMessage(request) ? request.getAttribute("error") : "" %>
+<style type="text/css">
+    html, body {
+        height: 100%;
+        background-color: wheat;
+    }
+</style>
+<body>
 
-    <input type="text" name="username" placeholder="Username"/>
-    <input type="text" name="password" placeholder="Password"/>
-    <input type="email" name="email" placeholder="Email">
-    <input type="text" name="country" placeholder="Country"/>
-    <input type="submit" value="login">
-</form>
+<button class="btn-primary rounded-3" onclick="window.location='index.jsp'">Back to welcome page</button>
+<div
+        class="container h-100 w-25 d-flex flex-column justify-content-center gap-3"
+>
+    <form action="register" method="post">
+        <div class="card border-dark">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">Register page</h5>
+                <h6 class="text-danger text-center">
+                    <%= addErrorMessage(request) ? request.getAttribute("error") : "" %>
+                </h6>
+                <div class="form-group mb-2">
+                    <label for="someUsername">Username</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="someUsername"
+                            name="username"
+                            aria-describedby="nameHelp"
+                            placeholder="Enter username"
+                    />
+                </div>
+                <div class="form-group mb-2">
+                    <label for="somePassword">Password</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            name="password"
+                            id="somePassword"
+                            placeholder="Password"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="someEmail">Email</label>
+                    <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            id="someEmail"
+                            placeholder="Email"
+                    />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="someCountry">Country</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            name="country"
+                            id="someCountry"
+                            placeholder="Country"
+                    />
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<%--<form action="register" method="post">--%>
+
+<%--    <%= addErrorMessage(request) ? request.getAttribute("error") : "" %>--%>
+
+<%--    <input type="text" name="username" placeholder="Username"/>--%>
+<%--    <input type="text" name="password" placeholder="Password"/>--%>
+<%--    <input type="email" name="email" placeholder="Email">--%>
+<%--    <input type="text" name="country" placeholder="Country"/>--%>
+<%--    <input type="submit" value="login">--%>
+<%--</form>--%>
 
 </body>
 </html>

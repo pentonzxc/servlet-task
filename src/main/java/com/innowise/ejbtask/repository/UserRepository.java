@@ -1,8 +1,8 @@
 package com.innowise.ejbtask.repository;
 
 
-import com.innowise.ejbtask.DatabaseConfig;
-import com.innowise.ejbtask.User;
+import com.innowise.ejbtask.config.DatabaseConfig;
+import com.innowise.ejbtask.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -28,6 +28,7 @@ public class UserRepository {
         factory = DatabaseConfig.buildSessionFactory();
     }
 
+
     public Optional<User> findByName(String username) {
         Transaction transaction = null;
         User user = null;
@@ -49,6 +50,7 @@ public class UserRepository {
 
         return Optional.ofNullable(user);
     }
+
 
     public Optional<User> findById(Integer id) {
         Transaction transaction = null;

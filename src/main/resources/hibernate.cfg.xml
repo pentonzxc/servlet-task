@@ -10,8 +10,8 @@
         <property name="connection.password">postgres</property>
 
         <!-- DB schema will be updated if needed -->
-        <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+         <property name="hibernate.hbm2ddl.auto">create-drop</property>
         <property name="show_sql">true</property>
-        <mapping class="com.innowise.ejbtask.User"/>
+        <mapping class="com.innowise.ejbtask.entity.User"/>
     </session-factory>
 </hibernate-configuration>

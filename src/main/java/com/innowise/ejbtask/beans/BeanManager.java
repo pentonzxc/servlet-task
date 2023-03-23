@@ -1,6 +1,8 @@
 package com.innowise.ejbtask.beans;
 
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
+import com.innowise.ejbtask.wrapper.RequestAware;
+import com.innowise.ejbtask.wrapper.RequestData;
 import com.innowise.ejbtask.enums.AnswerType;
 import com.innowise.ejbtask.mapper.InputDataMapper;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +18,7 @@ import java.util.Map;
 @Singleton
 public class BeanManager {
 
-    private Map<String, Bean> beanMap = new HashMap<>();
+    private Map<String, RequestBean> beanMap = new HashMap<>();
 
     @EJB
     private RegisterBean registerBean;
@@ -31,18 +33,23 @@ public class BeanManager {
     private RemoveUserBean removeUserBean;
 
 
+    @EJB
+    private LogoutBean logoutBean;
+
+
     @PostConstruct
     private void init() {
         beanMap.put("register", registerBean);
         beanMap.put("users", usersBean);
         beanMap.put("login", loginBean);
         beanMap.put("delete", removeUserBean);
+        beanMap.put("logout" , logoutBean);
     }
 
 
     public void executeBean(String beanType, RequestAware requestAware) throws ServletException, IOException {
-        String forward = null;
-        Bean bean = beanMap.get(beanType);
+        String target = null;
+        RequestBean bean = beanMap.get(beanType);
 
         var requestData = requestWrapper(bean, requestAware);
 
@@ -50,31 +57,34 @@ public class BeanManager {
 
         requestAware.addAttribute(outputData);
 
-        forward = outputData.forward();
-        forward = requestAware.authorize(forward);
+        target = requestAware.authorize(outputData.to());
 
-        if(requestData.getAnswerType() == AnswerType.FORWARD) requestAware.forward(forward);
-        if(requestData.getAnswerType() == AnswerType.REDIRECT) requestAware.redirect();
+        if (requestData.getAnswerType() == AnswerType.FORWARD) requestAware.forward(target);
+        else if (requestData.getAnswerType() == AnswerType.REDIRECT) requestAware.redirect(target);
     }
 
 
-    private RequestData requestWrapper(Bean bean, RequestAware requestAware) {
+    private RequestData requestWrapper(RequestBean bean, RequestAware requestAware) {
         RequestData wrapper = null;
 
         if (bean instanceof RegisterBean) {
             wrapper = new RequestData(InputDataMapper.toRegisterBeanInputData(requestAware), AnswerType.FORWARD);
         }
 
-        if (bean instanceof UsersBean) {
-            wrapper = new RequestData(InputDataMapper.empty() , AnswerType.FORWARD);
+        else if (bean instanceof UsersBean) {
+            wrapper = new RequestData(InputDataMapper.empty(), AnswerType.FORWARD);
         }
 
-        if (bean instanceof LoginBean) {
+        else if (bean instanceof LoginBean) {
             wrapper = new RequestData(InputDataMapper.toLoginBeanInputData(requestAware), AnswerType.FORWARD);
         }
 
-        if (bean instanceof RemoveUserBean) {
+        else if (bean instanceof RemoveUserBean) {
             wrapper = new RequestData(InputDataMapper.toRemoveUserBeanInputData(requestAware), AnswerType.REDIRECT);
+        }
+
+        else if(bean instanceof LogoutBean){
+            wrapper =  new RequestData(InputDataMapper.toLogoutBeanInputData(requestAware) , AnswerType.FORWARD);
         }
 
         return wrapper;

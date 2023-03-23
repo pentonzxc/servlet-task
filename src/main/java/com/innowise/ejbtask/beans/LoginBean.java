@@ -1,21 +1,26 @@
 package com.innowise.ejbtask.beans;
 
-import com.innowise.ejbtask.User;
 import com.innowise.ejbtask.beans.data.DefaultData;
 import com.innowise.ejbtask.beans.data.ErrorData;
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
+import com.innowise.ejbtask.entity.User;
 import com.innowise.ejbtask.repository.UserRepository;
+import com.innowise.ejbtask.wrapper.RequestAware;
 import jakarta.ejb.EJB;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
+import jakarta.servlet.http.HttpSession;
+
+import static com.innowise.ejbtask.config.EncoderConfig.passwordEncoder;
 
 
 @Stateless
 @LocalBean
-public class LoginBean implements Bean {
+public class LoginBean implements RequestBean {
 
     @EJB
     private UserRepository userRepository;
+
 
     @Override
     public OutputData perform(InputData data, RequestAware request) {
@@ -25,10 +30,12 @@ public class LoginBean implements Bean {
             return new ErrorData("login", "Invalid credentials");
         }
 
-        request.getRequest().getSession(false).setAttribute("role", user.getRole().name());
+        HttpSession session = request.getRequest().getSession(false);
+        session.setAttribute("username", user.getName());
+        session.setAttribute("role", user.getRole().name());
 
 
-        return new DefaultData(data.forward(), "", "");
+        return new DefaultData(data.to(), "", "");
     }
 
 
@@ -40,7 +47,7 @@ public class LoginBean implements Bean {
 
 
     public boolean validPassword(LoginData data, User user) {
-        return data.getPassword().equals(user.getPassword());
+        return passwordEncoder().matches(data.getPassword(), user.getPassword());
     }
 
 
@@ -71,7 +78,7 @@ public class LoginBean implements Bean {
 
 
         @Override
-        public String forward() {
+        public String to() {
             return forward;
         }
     }

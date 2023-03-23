@@ -16,9 +16,9 @@
 </head>
 <body>
 <div class="container h-100 w-25 d-flex flex-column justify-content-center gap-3">
-    <input class="btn-secondary" type="submit" value="Авторизация" onclick="window.location='login.jsp'"/>
-    <input class="btn-secondary" type="submit" value="Регистрация" onclick="window.location='register.jsp'"/>
-    <input class="btn-secondary" type="submit" value="Домашняя страница" onclick="window.location='home.jsp'"/>
+    <input class="form-control btn-secondary" type="submit" value="Авторизация" onclick="window.location='login.jsp'"/>
+    <input class="form-control btn-secondary" type="submit" value="Регистрация" onclick="window.location='register.jsp'"/>
+    <input class="form-control btn-secondary" type="submit" value="Домашняя страница" onclick="window.location='home.jsp'"/>
 </div>
 </body>
 </html>

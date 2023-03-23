@@ -1,18 +1,18 @@
-package com.innowise.ejbtask.beans;
+package com.innowise.ejbtask.beans.interfaces;
 
 
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.wrapper.RequestAware;
 
-public interface Bean {
+public interface RequestBean {
     OutputData perform(InputData data , RequestAware request);
 
     interface InputData {
-        String forward();
+        String to();
     }
 
     interface OutputData {
 
-        String forward();
+        String to();
 
         String attributeName();
 

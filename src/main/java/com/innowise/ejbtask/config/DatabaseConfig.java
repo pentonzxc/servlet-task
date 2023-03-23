@@ -1,16 +1,17 @@
-package com.innowise.ejbtask;
+package com.innowise.ejbtask.config;
 
+import com.innowise.ejbtask.entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 
 public class DatabaseConfig {
-
     private static SessionFactory factory;
 
     private DatabaseConfig() {
     }
+
 
     public static synchronized SessionFactory buildSessionFactory() {
         if (factory == null) {

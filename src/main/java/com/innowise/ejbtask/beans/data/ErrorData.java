@@ -1,14 +1,12 @@
 package com.innowise.ejbtask.beans.data;
 
-import com.innowise.ejbtask.beans.Bean;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
 
-public class ErrorData implements Bean.OutputData {
-
+public class ErrorData implements RequestBean.OutputData {
 
     private String errorMsg;
 
     private String forward;
-
 
     public ErrorData(String forward, String errorMsg) {
         this.forward = forward;
@@ -16,7 +14,7 @@ public class ErrorData implements Bean.OutputData {
     }
 
     @Override
-    public String forward() {
+    public String to() {
         return forward;
     }
 

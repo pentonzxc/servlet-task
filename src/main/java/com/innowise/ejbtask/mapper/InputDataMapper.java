@@ -1,31 +1,37 @@
 package com.innowise.ejbtask.mapper;
 
-import com.innowise.ejbtask.beans.Bean;
 import com.innowise.ejbtask.beans.LoginBean;
 import com.innowise.ejbtask.beans.RegisterBean;
 import com.innowise.ejbtask.beans.RemoveUserBean;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
 import com.innowise.ejbtask.beans.data.DefaultData;
 import com.innowise.ejbtask.beans.data.EmptyData;
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.wrapper.RequestAware;
 import com.innowise.ejbtask.util.RequestUtil;
 
 public class InputDataMapper {
 
-    public static Bean.InputData toRegisterBeanInputData(RequestAware requestAware) {
+    public static RequestBean.InputData toRegisterBeanInputData(RequestAware requestAware) {
         var req = requestAware.getRequest();
 
-        return new RegisterBean.RegisterData(req.getParameter("username"), req.getParameter("password"), "index");
+        return new RegisterBean.RegisterData(
+                req.getParameter("username"),
+                req.getParameter("password"),
+                req.getParameter("email"),
+                req.getParameter("country"),
+                "index"
+        );
     }
 
 
-    public static Bean.InputData toLoginBeanInputData(RequestAware requestAware) {
+    public static RequestBean.InputData toLoginBeanInputData(RequestAware requestAware) {
         var req = requestAware.getRequest();
 
         return new LoginBean.LoginData(req.getParameter("username"), req.getParameter("password"), "home");
     }
 
 
-    public static Bean.InputData toRemoveUserBeanInputData(RequestAware requestAware) {
+    public static RequestBean.InputData toRemoveUserBeanInputData(RequestAware requestAware) {
         var req = requestAware.getRequest();
         var queryMap = RequestUtil.query(req);
 
@@ -33,10 +39,8 @@ public class InputDataMapper {
     }
 
 
-    public static Bean.InputData toUsersBeanInputData(RequestAware requestAware) {
-        var req = requestAware.getRequest();
-
-        return new DefaultData("list", "", "");
+    public static RequestBean.InputData toLogoutBeanInputData(RequestAware requestAware) {
+        return new DefaultData("index", "", "");
     }
 
 

@@ -1,8 +1,9 @@
-package com.innowise.ejbtask.command;
+package com.innowise.ejbtask.wrapper;
 
-import com.innowise.ejbtask.beans.Bean;
 import com.innowise.ejbtask.beans.data.EmptyData;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
 import com.innowise.ejbtask.enums.Role;
+import com.innowise.ejbtask.util.PageConstants;
 import com.innowise.ejbtask.util.RequestUtil;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
@@ -12,11 +13,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-public class RequestAware {
+import static com.innowise.ejbtask.util.PageConstants.ADMIN_PREFIX;
+import static com.innowise.ejbtask.util.RequestUtil.isRoleDependsPage;
 
+public class RequestAware {
     private ServletContext context;
+
     private HttpServletRequest request;
+
     private HttpServletResponse response;
+
 
     public RequestAware(
             ServletContext servletContext,
@@ -32,6 +38,7 @@ public class RequestAware {
         return new RequestAware(context, req, resp);
     }
 
+
     public void forward(String target) throws ServletException, IOException {
         if (target == null || target.isEmpty()) {
             return;
@@ -43,7 +50,20 @@ public class RequestAware {
     }
 
 
-    public void addAttribute(Bean.OutputData data) {
+    public void redirect(String target) {
+        if (target == null || target.isEmpty()) {
+            return;
+        }
+
+        try {
+            response.sendRedirect(target);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void addAttribute(RequestBean.OutputData data) {
         if (data instanceof EmptyData || data.attributeName().isEmpty()) {
             return;
         }
@@ -51,28 +71,30 @@ public class RequestAware {
         request.setAttribute(data.attributeName(), data.attributeValue());
     }
 
+
     public ServletContext getContext() {
         return context;
     }
 
+
     public HttpServletRequest getRequest() {
         return request;
     }
+
 
     public HttpServletResponse getResponse() {
         return response;
     }
 
 
-
-    public String authorize(String forward) {
+    public String authorize(String page) {
         Role role = RequestUtil.role(request);
 
-        if ("list".equals(forward) && role == Role.ADMIN) {
-            forward = "adm-" + forward;
+        if (isRoleDependsPage(page) && role == Role.ADMIN) {
+            page = ADMIN_PREFIX + page;
         }
 
-        return forward;
+        return page;
     }
 }
 

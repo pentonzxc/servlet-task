@@ -1,10 +1,10 @@
 package com.innowise.ejbtask.beans.data;
 
-import com.innowise.ejbtask.beans.Bean;
+import com.innowise.ejbtask.beans.interfaces.RequestBean;
 
-public class EmptyData implements Bean.OutputData, Bean.InputData {
+public class EmptyData implements RequestBean.OutputData, RequestBean.InputData {
     @Override
-    public String forward() {
+    public String to() {
         return "";
     }
 

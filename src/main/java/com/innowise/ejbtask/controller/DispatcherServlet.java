@@ -1,8 +1,8 @@
-package com.innowise.ejbtask;
+package com.innowise.ejbtask.controller;
 
 
 import com.innowise.ejbtask.beans.BeanManager;
-import com.innowise.ejbtask.command.RequestAware;
+import com.innowise.ejbtask.wrapper.RequestAware;
 import com.innowise.ejbtask.enums.Role;
 import com.innowise.ejbtask.util.RequestUtil;
 import jakarta.ejb.EJB;
@@ -21,6 +21,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @EJB
     private BeanManager beanManager;
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,10 +46,4 @@ public class DispatcherServlet extends HttpServlet {
     private String beanType(HttpServletRequest req) {
         return RequestUtil.path(req);
     }
-
-
-    private Role accessLevel(HttpServletRequest req) {
-        return null;
-    }
-
 }
